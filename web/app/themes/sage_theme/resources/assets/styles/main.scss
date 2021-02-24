@@ -23,3 +23,21 @@
 @import "layouts/pages";
 @import "layouts/posts";
 @import "layouts/tinymce";
+@import "common/fonts";
+
+* {
+  font-family: SF,SF Pro Icons,Helvetica Neue,Helvetica,Arial,sans-serif;
+}
+
+.container {
+  overflow: hidden;
+  width: 1200px;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  @media screen and (max-width:1200px){
+    width: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+}

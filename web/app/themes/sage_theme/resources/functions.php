@@ -90,3 +90,47 @@ Container::getInstance()
             'view' => require dirname(__DIR__).'/config/view.php',
         ]);
     }, true);
+
+add_action ('wp_ajax_sendf', 'sendf');
+add_action ('wp_ajax_nopriv_sendf', 'sendf');
+
+function sendf () {
+
+    if (!isset($_POST['name']) || !isset($_POST['phone']) || !isset($_POST['email']) || !isset($_POST['birthday']) || !isset($_POST['additionally'])) {
+        echo json_encode(array(
+            "status" => "error",
+            "message" => "error in post data"
+        ));
+        exit;
+    }
+    $name = $_POST['name'];
+    $phone = $_POST['phone'];
+    $email = $_POST['email'];
+    $birthday = $_POST['birthday'];
+    $additionally = $_POST['additionally'];
+    $headers[] = 'Content-Type: text/html; charset=UTF-8';
+    $headers[] = 'From: Admin <'.get_option('admin_email').'>';
+    $message = "Name: $name\n
+                Phone: $phone\n
+                Email: $email\n
+                Birthday: $birthday\n
+                Additionally: $additionally";
+
+    $mailresult = wp_mail(get_option('admin_email'),"New quest from user", $message, $headers);
+
+    if ($mailresult) {
+        echo json_encode (array(
+            "status" => 'ok',
+            "message" => 'message send'
+        ));
+        exit;
+    } else {
+        echo json_encode (array(
+            "status" => 'error',
+            "message" => 'message don\'t send'
+        ));
+        exit;
+    }
+
+    exit;
+}
